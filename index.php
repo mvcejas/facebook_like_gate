@@ -10,12 +10,13 @@
 FB.init({
 	appId		: '407725032616899',
 	channelUrl 	: '//localhost',
+	status 		: true,
+	cookie		: true,
 	xfbml		: true,
 });
 FB.getLoginStatus(function(response) {
-	console.log(response);
 	if(response.status=='connected'){
-		var fb_pid = 122671411130627;
+		var fb_pid = 1226714111306260;
 		var fb_uid = response.authResponse.userID;
 		var fb_fql = "SELECT uid FROM page_fan WHERE page_id = "+fb_pid+"and uid="+fb_uid;
 		FB.api({
@@ -30,15 +31,23 @@ FB.getLoginStatus(function(response) {
 		$('#fb_likegate').modal();
 	}
 });
+FB.Event.subscribe('edge.create',function(response) {
+	if(response){
+		$('#fb_likegate').modal('hide');
+	}
+});
 </script>
+<style>
+._5v4{display: none !important;}
+</style>
 </head>
 <body>
 	<div id="fb_likegate" class="modal hide">
 		<div class="modal-header">
-			<h6>Please like our page before you can view the complete page.</h6>
+			<h5>Please like our page before you can view the complete page.</h5>
 		</div>
-		<div class="modal-body">
-			<fb:like send="true" width="450" show_faces="true" />
+		<div class="modal-body" style="height">
+			<div class="fb-like-box" data-href="https://www.facebook.com/Calapenians" data-width="530" data-show-faces="true" data-stream="false" data-header="true"></div>
 		</div>
 	</div>
 </body>
