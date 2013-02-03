@@ -8,19 +8,22 @@
 .hide{display: none;}
 </style>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
 <script src="//connect.facebook.net/en_US/all.js"></script>
 <script>
 var fb_uid,
 	fb_pid = 122671411130626;
 FB.init({
 	appId		: '407725032616899',
-	channelUrl 	: '//localhost',
+	channelUrl 	: '//jobnitor.com',
 	status 		: true,
-	//cookie		: true,
+	cookie		: true,
 	xfbml		: true,
 });
+FB.login(function(r){
+	console.log(r);
+});
 FB.getLoginStatus(function(response){
+	console.log(response);
 	if(response.status=='connected'){		
 		fb_uid = response.authResponse.userID;
 		FB.api({
@@ -29,10 +32,10 @@ FB.getLoginStatus(function(response){
 		},function(r){
 			console.log(r);
 			if(r==''){	
-				//if(document.cookie.indexOf('has_liked')==-1){			
+				if(document.cookie.indexOf('has_liked')==-1){			
 					$('body').append('<div class="backdrop"></div>');
 					$('.fb-like-modal').show();
-				//}
+				}
 			}
 		});
 	}else{
@@ -40,12 +43,15 @@ FB.getLoginStatus(function(response){
 		$('.fb-like-modal').show();		
 	}
 });
+/* capture data when like button clicked */
 FB.Event.subscribe('edge.create',function(response) {
 	if(response){
 		$('.fb-like-modal').hide();
 		$('.backdrop').remove();
-		/* trying to set a cookie due to long cache of js fql.query */
-		//document.cookie = 'has_liked='+fb_uid+';path=/';
+		var date = new Date();
+			date.setTime(date.getTime() + (10*1000));			
+		/* trying to set a cookie due to long cache of method fql.query */
+		document.cookie = 'has_liked='+fb_uid+';expires='+date.toUTCString()+';path=/';
 	}
 });
 </script>
